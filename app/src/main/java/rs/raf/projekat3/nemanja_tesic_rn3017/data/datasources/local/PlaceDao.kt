@@ -13,9 +13,6 @@ abstract class PlaceDao {
     @Insert
     abstract fun insert(place: PlaceEntity): Completable
 
-//    @Query("UPDATE places SET title = :title, note = :note WHERE id == :id")
-//    abstract fun update(id: Long, title: String, note: String): Completable
-
     @Update
     abstract fun update(place: PlaceEntity): Completable
 

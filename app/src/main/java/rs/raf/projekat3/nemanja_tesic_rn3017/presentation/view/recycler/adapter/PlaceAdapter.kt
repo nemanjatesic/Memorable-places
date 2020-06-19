@@ -39,7 +39,6 @@ class PlaceAdapter(
         val layoutInflater = LayoutInflater.from(parent.context)
         val containerView = layoutInflater.inflate(R.layout.layout_place_list_item, parent, false)
         return PlaceViewHolder(containerView, functionViewMap, functionEditPlace, functionDeletePlace)
-
     }
 
     override fun onBindViewHolder(holder: PlaceViewHolder, position: Int) {

@@ -87,20 +87,8 @@ abstract class MyMapActivity(layoutId: Int, private val mapId: Int) : AppCompatA
         }
     }
 
-    override fun onConnectionSuspended(p0: Int) {
-
-    }
-
-    override fun onConnectionFailed(p0: ConnectionResult) {
-
-    }
-
     override fun onLocationChanged(location: Location?) {
         if (location != null) lastKnownLocation = location
-    }
-
-    override fun onMapClick(p0: LatLng?) {
-
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -136,6 +124,18 @@ abstract class MyMapActivity(layoutId: Int, private val mapId: Int) : AppCompatA
         } else {
             true
         }
+    }
+
+    override fun onConnectionSuspended(p0: Int) {
+
+    }
+
+    override fun onConnectionFailed(p0: ConnectionResult) {
+
+    }
+
+    override fun onMapClick(p0: LatLng?) {
+
     }
 
     companion object {

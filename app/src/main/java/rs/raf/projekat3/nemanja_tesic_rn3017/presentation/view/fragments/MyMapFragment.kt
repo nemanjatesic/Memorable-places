@@ -88,20 +88,8 @@ abstract class MyMapFragment(layoutId: Int, private val mapId: Int) : Fragment(l
         }
     }
 
-    override fun onConnectionSuspended(p0: Int) {
-
-    }
-
-    override fun onConnectionFailed(p0: ConnectionResult) {
-
-    }
-
     override fun onLocationChanged(location: Location?) {
         if (location != null) lastKnownLocation = location
-    }
-
-    override fun onMapClick(p0: LatLng?) {
-
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -137,6 +125,18 @@ abstract class MyMapFragment(layoutId: Int, private val mapId: Int) : Fragment(l
         } else {
             true
         }
+    }
+
+    override fun onConnectionSuspended(p0: Int) {
+
+    }
+
+    override fun onConnectionFailed(p0: ConnectionResult) {
+
+    }
+
+    override fun onMapClick(p0: LatLng?) {
+
     }
 
     companion object {

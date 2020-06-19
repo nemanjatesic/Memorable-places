@@ -65,7 +65,6 @@ class ViewPlacesFragment : MyMapFragment(R.layout.fragment_map, R.id.map1) {
         }
     }
 
-
     override fun onLocationChanged(location: Location?) {
         super.onLocationChanged(location)
         if (firstTime && location != null) {
@@ -78,6 +77,5 @@ class ViewPlacesFragment : MyMapFragment(R.layout.fragment_map, R.id.map1) {
             firstTime = false
         }
     }
-
 
 }

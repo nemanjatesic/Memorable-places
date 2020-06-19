@@ -15,7 +15,7 @@ import rs.raf.projekat3.nemanja_tesic_rn3017.presentation.view.fragments.ListFra
 
 class DetailPlaceViewActivity : MyMapActivity(R.layout.activity_detail_place_view, R.id.map2) {
 
-    private var place: Place? = null
+    private lateinit var place: Place
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,13 +23,13 @@ class DetailPlaceViewActivity : MyMapActivity(R.layout.activity_detail_place_vie
     }
 
     private fun init() {
-        place = intent.getParcelableExtra(ListFragment.PLACE)
-        if (place == null) {
+        place = intent.getParcelableExtra(ListFragment.PLACE)?: Place(-1,0.0,0.0,"","","")
+        if (place.id == (-1).toLong()) {
             Toast.makeText(this, "Error occurred", Toast.LENGTH_SHORT).show()
             finish()
         }
-        titleDetailTv.text = place!!.title
-        noteDetailTv.text = place!!.note
+        titleDetailTv.text = place.title
+        noteDetailTv.text = place.note
     }
 
     override fun onMapReady(googleMap: GoogleMap?) {
@@ -41,13 +41,13 @@ class DetailPlaceViewActivity : MyMapActivity(R.layout.activity_detail_place_vie
     }
 
     private fun loadMarker() {
-        val latLng = LatLng(place!!.latitude, place!!.longitude)
-        map?.addMarker(MarkerOptions().position(latLng).title(place!!.title).snippet(place!!.note))
+        val latLng = LatLng(place.latitude, place.longitude)
+        map?.addMarker(MarkerOptions().position(latLng).title(place.title).snippet(place.note))
     }
 
     private fun zoomOnMarker() {
         val cameraPosition = CameraPosition.Builder()
-            .target(LatLng(place!!.latitude, place!!.longitude)) // Sets the center of the map to Mountain View
+            .target(LatLng(place.latitude, place.longitude)) // Sets the center of the map to Mountain View
             .zoom(15f) // Sets the zoom
             .build() // Creates a CameraPosition from the builder
 

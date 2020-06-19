@@ -18,7 +18,7 @@ import rs.raf.projekat3.nemanja_tesic_rn3017.presentation.viewmodel.PlaceViewMod
 class EditPlaceActivity : MyMapActivity(R.layout.activity_edit, R.id.map3) {
 
     private val placeViewModel: PlaceContract.ViewModel by viewModel<PlaceViewModel>()
-    private var place: Place? = null
+    private lateinit var place: Place
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,14 +26,14 @@ class EditPlaceActivity : MyMapActivity(R.layout.activity_edit, R.id.map3) {
     }
 
     private fun init() {
-        place = intent.getParcelableExtra(ListFragment.PLACE)
-        if (place == null) {
+        place = intent.getParcelableExtra(ListFragment.PLACE)?: Place(-1,0.0,0.0,"","","")
+        if (place.id == (-1).toLong()) {
             Toast.makeText(this, "Error occurred", Toast.LENGTH_SHORT).show()
             finish()
         }
         placeViewModel.getAll()
-        titleEditEt.setText(place!!.title)
-        noteEditEt.setText(place!!.note)
+        titleEditEt.setText(place.title)
+        noteEditEt.setText(place.note)
         initListeners()
     }
 
@@ -44,12 +44,12 @@ class EditPlaceActivity : MyMapActivity(R.layout.activity_edit, R.id.map3) {
         saveBtn.setOnClickListener {
             placeViewModel.update(
                 Place(
-                    place!!.id,
-                    place!!.latitude,
-                    place!!.longitude,
+                    place.id,
+                    place.latitude,
+                    place.longitude,
                     titleEditEt.text.toString(),
                     noteEditEt.text.toString(),
-                    place!!.dateCreated)
+                    place.dateCreated)
             )
             finish()
         }
@@ -64,13 +64,13 @@ class EditPlaceActivity : MyMapActivity(R.layout.activity_edit, R.id.map3) {
     }
 
     private fun loadMarker() {
-        val latLng = LatLng(place!!.latitude, place!!.longitude)
-        map?.addMarker(MarkerOptions().position(latLng).title(place!!.title).snippet(place!!.note))
+        val latLng = LatLng(place.latitude, place.longitude)
+        map?.addMarker(MarkerOptions().position(latLng).title(place.title).snippet(place.note))
     }
 
     private fun zoomOnMarker() {
         val cameraPosition = CameraPosition.Builder()
-            .target(LatLng(place!!.latitude, place!!.longitude)) // Sets the center of the map to Mountain View
+            .target(LatLng(place.latitude, place.longitude)) // Sets the center of the map to Mountain View
             .zoom(15f) // Sets the zoom
             .build() // Creates a CameraPosition from the builder
 
