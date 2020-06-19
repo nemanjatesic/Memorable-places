@@ -1,4 +1,14 @@
 <resources>
     <string name="app_name">TreciProjekat</string>
     <string name="title_activity_maps">Map</string>
+    <string name="title">Title</string>
+    <string name="note">Note</string>
+    <string name="change">Change</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="search">🔎 Search</string>
+    <string name="unknown">Unknown</string>
+    <string name="add_place">Add place</string>
+    <string name="add">Add</string>
+    <string name="places">Places</string>
 </resources>

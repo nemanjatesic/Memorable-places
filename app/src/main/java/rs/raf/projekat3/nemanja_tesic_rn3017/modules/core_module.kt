@@ -8,7 +8,6 @@ import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
-import retrofit2.Retrofit
 import rs.raf.projekat3.nemanja_tesic_rn3017.data.db.ProjectDatabase
 import java.util.*
 

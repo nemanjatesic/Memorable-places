@@ -9,6 +9,7 @@ import org.koin.androidx.fragment.koin.fragmentFactory
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
 import rs.raf.projekat3.nemanja_tesic_rn3017.modules.coreModule
+import rs.raf.projekat3.nemanja_tesic_rn3017.modules.placeModule
 import timber.log.Timber
 
 class MyApplication : Application() {
@@ -30,7 +31,8 @@ class MyApplication : Application() {
 
     private fun initKoin() {
         val modules = listOf(
-            coreModule
+            coreModule,
+            placeModule
         )
         startKoin {
             androidLogger(Level.DEBUG)
