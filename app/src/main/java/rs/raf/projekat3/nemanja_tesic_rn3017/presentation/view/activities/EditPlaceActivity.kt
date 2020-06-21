@@ -8,6 +8,7 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_edit.*
+import kotlinx.android.synthetic.main.fragment_add.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import rs.raf.projekat3.nemanja_tesic_rn3017.R
 import rs.raf.projekat3.nemanja_tesic_rn3017.data.model.domain.Place
@@ -42,6 +43,10 @@ class EditPlaceActivity : MyMapActivity(R.layout.activity_edit, R.id.map3) {
             finish()
         }
         saveBtn.setOnClickListener {
+            if (titleEditEt.text.toString().isEmpty() || noteEditEt.text.toString().isEmpty()) {
+                Toast.makeText(this, "You must enter both title and note", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             placeViewModel.update(
                 Place(
                     place.id,

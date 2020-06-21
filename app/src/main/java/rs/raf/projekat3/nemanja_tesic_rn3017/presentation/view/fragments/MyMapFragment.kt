@@ -19,6 +19,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import timber.log.Timber
 
 abstract class MyMapFragment(layoutId: Int, private val mapId: Int) : Fragment(layoutId), OnMapReadyCallback,
     GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
@@ -103,23 +104,19 @@ abstract class MyMapFragment(layoutId: Int, private val mapId: Int) : Fragment(l
                         map?.isMyLocationEnabled = true
                     }
                 } else {
-                    Toast.makeText(requireContext(), "permission denied", Toast.LENGTH_LONG).show()
+                    Toast.makeText(activity, "This application needs location permission in order to work", Toast.LENGTH_SHORT).show()
                 }
                 return
             }
         }
     }
 
-    protected fun checkLocationPermission(): Boolean {
+    protected open fun checkLocationPermission(): Boolean {
         return if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
-                ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                    MY_PERMISSIONS_REQUEST_LOCATION
-                )
+            if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
+                requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), MY_PERMISSIONS_REQUEST_LOCATION)
             } else {
-                ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                    MY_PERMISSIONS_REQUEST_LOCATION
-                )
+                requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), MY_PERMISSIONS_REQUEST_LOCATION)
             }
             false
         } else {
@@ -141,5 +138,15 @@ abstract class MyMapFragment(layoutId: Int, private val mapId: Int) : Fragment(l
 
     companion object {
         const val MY_PERMISSIONS_REQUEST_LOCATION = 99
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && map != null) {
+            if (apiClient == null) {
+                buildGoogleApiClient()
+                map?.isMyLocationEnabled = true
+            }
+        }
     }
 }

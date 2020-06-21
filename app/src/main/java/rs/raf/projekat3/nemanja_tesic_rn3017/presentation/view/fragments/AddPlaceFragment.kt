@@ -9,6 +9,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.fragment_add.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -17,6 +18,7 @@ import rs.raf.projekat3.nemanja_tesic_rn3017.data.model.domain.Place
 import rs.raf.projekat3.nemanja_tesic_rn3017.presentation.contracts.PlaceContract
 import rs.raf.projekat3.nemanja_tesic_rn3017.presentation.view.states.PlaceState
 import rs.raf.projekat3.nemanja_tesic_rn3017.presentation.viewmodel.PlaceViewModel
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -25,6 +27,7 @@ class AddPlaceFragment : MyMapFragment(R.layout.fragment_add, R.id.map) {
 
     private val placeViewModel: PlaceContract.ViewModel by viewModel<PlaceViewModel>()
     private var firstTime = true
+    private var listOfOldMarkers: MutableList<Marker?> = mutableListOf()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -48,16 +51,17 @@ class AddPlaceFragment : MyMapFragment(R.layout.fragment_add, R.id.map) {
 
     private fun initListeners() {
         cancelBtn.setOnClickListener {
-            placeViewModel.getAll()
+            titleEt.setText("")
+            noteEt.setText("")
         }
 
         addBtn.setOnClickListener {
             if (lastKnownLocation == null) {
-                Toast.makeText(context, "Error occurred please try again", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, "Error occurred please try again", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             if (titleEt.text.toString().isEmpty() || noteEt.text.toString().isEmpty()) {
-                Toast.makeText(context, "You must enter both title and note", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, "You must enter both title and note", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             val sdf = SimpleDateFormat("yyyy.MM.dd. HH:mm")
@@ -72,9 +76,18 @@ class AddPlaceFragment : MyMapFragment(R.layout.fragment_add, R.id.map) {
 
     private fun renderState(state: PlaceState) {
         when(state) {
-            is PlaceState.Success -> loadMarkers(state.places)
+            is PlaceState.Success -> {
+                clearMarkers()
+                loadMarkers(state.places)
+            }
             is PlaceState.Error -> Toast.makeText(context, state.message, Toast.LENGTH_SHORT).show()
             is PlaceState.Add -> Toast.makeText(context, state.message, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun clearMarkers() {
+        listOfOldMarkers.forEach {
+            it?.remove()
         }
     }
 
@@ -83,15 +96,14 @@ class AddPlaceFragment : MyMapFragment(R.layout.fragment_add, R.id.map) {
 
         list.forEach {
             val latLng = LatLng(it.latitude, it.longitude)
-            map?.addMarker(MarkerOptions().position(latLng).title(it.title).snippet(it.note))
+            val marker = map?.addMarker(MarkerOptions().position(latLng).title(it.title).snippet(it.note))
+            listOfOldMarkers.add(marker)
         }
     }
 
     override fun onMapReady(googleMap: GoogleMap?) {
         super.onMapReady(googleMap)
-        if (checkLocationPermission()) {
-            placeViewModel.getAll()
-        }
+        placeViewModel.getAll()
     }
 
     override fun onLocationChanged(location: Location?) {

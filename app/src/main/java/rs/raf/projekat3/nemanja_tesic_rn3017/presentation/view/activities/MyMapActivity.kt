@@ -18,6 +18,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import timber.log.Timber
 
 abstract class MyMapActivity(layoutId: Int, private val mapId: Int) : AppCompatActivity(layoutId), OnMapReadyCallback,
     GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
@@ -92,6 +93,7 @@ abstract class MyMapActivity(layoutId: Int, private val mapId: Int) : AppCompatA
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             MY_PERMISSIONS_REQUEST_LOCATION -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -102,7 +104,7 @@ abstract class MyMapActivity(layoutId: Int, private val mapId: Int) : AppCompatA
                         map?.isMyLocationEnabled = true
                     }
                 } else {
-                    Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "This application needs location permission in order to work", Toast.LENGTH_SHORT).show()
                 }
                 return
             }
